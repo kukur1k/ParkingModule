@@ -2,13 +2,14 @@
 
 public class Client
 {
-    public Client(int id, string numberAuto)
+    public static int _idCounter = 0;
+    public int Id { get; protected set; }
+    public Client(string numberAuto)
     {
-        Id = id;
+        Id = ++_idCounter;
         NumberAuto = numberAuto;
     }
-
-    public int Id { get; set; }
+    
     public string NumberAuto { get; set; }
     
     // Liskov - у родителя стандартный метод, переопределяемый особым образом для ребенка (зарег. клиента)
@@ -21,7 +22,7 @@ public class Client
 
 public class RegisterClient: Client
 {
-    public RegisterClient(int id, string numberAuto, string login, string password) : base(id, numberAuto)
+    public RegisterClient(string numberAuto, string login, string password) : base(numberAuto)
     {
         Login = login;
         Password = password;
