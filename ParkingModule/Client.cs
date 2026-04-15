@@ -54,15 +54,25 @@ public interface INotificationService
 }
 
 
-public class PaymentService: IPaymentService
+// DIP - 2 класса для оплаты в зависимости от выбранного типа
+public class PaymentServiceCash: IPaymentService
 {
     public void SellPayment(double amount, Client client)
     {
-        Console.WriteLine($"Клиент -- {client.NumberAuto} платил {amount} руб.");
+        Console.WriteLine($"Клиент -- {client.NumberAuto} платил {amount} руб. наличными");
+    }
+}
+
+public class PaymentServiceCard: IPaymentService
+{
+    public void SellPayment(double amount, Client client)
+    {
+        Console.WriteLine($"Клиент -- {client.NumberAuto} платил {amount} руб. картой");
     }
 }
     
-// Single Responsibility Principle - оплата и вывод сообщения о выезде разделены
+// Single Responsibility Principle - оплата и вывод сообщения о выезде разделены,
+// класс Parking сам по себе отвечает только за учет мест (моделирование парколвочной системы)
 
 
 // Класс для вывода сообщений в зависимости от типа клиента
@@ -89,19 +99,18 @@ public class NotificationService: INotificationService
 // Реализовываем класс верхнего уровня
 public class Parking
 {
-    private readonly IPaymentService _paymentService;
-    private readonly INotificationService _notificationService;
 
-    public Parking(IPaymentService paymentService, INotificationService notificationService, int id, string adress, string city, bool isFill, int maxCountState, int currentCountState)
+    private readonly INotificationService _notificationService;
+    
+    public Parking( INotificationService notificationService, int id, string adress, string city, int maxCountState)
     {
-        _paymentService = paymentService;
         _notificationService = notificationService;
         Id = id;
         Adress = adress;
         City = city;
-        IsFill = isFill;
+        IsFill = false;
         this.maxCountState = maxCountState;
-        this.currentCountState = currentCountState;
+        this.currentCountState = 0;
     }
 
     public int Id { get; set; }
@@ -112,11 +121,12 @@ public class Parking
     public int currentCountState { get; set; }
 
     
-    public void AddAuto(Client client, double amount)
+    
+    public void AddAuto(Client client, double amount, IPaymentService paymentService)
     {
         if (!IsFill)
         {
-            _paymentService.SellPayment(amount, client);
+            paymentService.SellPayment(amount, client);
             currentCountState++;
             Console.WriteLine("Парковка совершена: \n"+ client.GetClientInfo());
             Console.WriteLine("Мест занято - " + currentCountState);
