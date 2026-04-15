@@ -1,12 +1,17 @@
 ﻿namespace ParkingModule;
 
-// Open-Closed
 public class Client
 {
+    public Client(int id, string numberAuto)
+    {
+        Id = id;
+        NumberAuto = numberAuto;
+    }
+
     public int Id { get; set; }
     public string NumberAuto { get; set; }
     
-    // Liskov
+    // Liskov - у родителя стандартный метод, переопределяемый особым образом для ребенка (зарег. клиента)
     public virtual string GetClientInfo()
     {
         return $"ID: {Id}, Авто: {NumberAuto} (Гость)";
@@ -16,6 +21,12 @@ public class Client
 
 public class RegisterClient: Client
 {
+    public RegisterClient(int id, string numberAuto, string login, string password) : base(id, numberAuto)
+    {
+        Login = login;
+        Password = password;
+    }
+
     public string Login { get; set; }
     public string Password { get; set; }
     
@@ -27,10 +38,15 @@ public class RegisterClient: Client
 }
 
 
+// OpenClosed - интерфейсы для операция (далее для них создаются отдельные классы)
+// ISP - идет разделение обязанностей сервисов по интерфейсам для вывода сообщений и проведения оплаты
 public interface IPaymentService
 {
     void SellPayment(double amount, Client client);
 }
+
+// Dependency Inversion Principle - создаем интерфейс, а потом создадим класс для вывода сообщений
+// *(разных, в зависимости от типа клиента - моделируем варианты сообщения на терминале или в смс)
 
 public interface INotificationService
 {
@@ -38,16 +54,56 @@ public interface INotificationService
 }
 
 
+public class PaymentService: IPaymentService
+{
+    public void SellPayment(double amount, Client client)
+    {
+        Console.WriteLine($"Клиент -- {client.NumberAuto} платил {amount} руб.");
+    }
+}
+    
+// Single Responsibility Principle - оплата и вывод сообщения о выезде разделены
+
+
+// Класс для вывода сообщений в зависимости от типа клиента
+public class NotificationService: INotificationService
+{
+    public void SendNotification(string message, Client client)
+    {
+        if (client is RegisterClient registerClient)
+        {
+            Console.WriteLine($"SMS-Сообщение для клиента {registerClient.Login}: {message}");
+        }
+        else
+        {
+            Console.WriteLine($"Сообщение на терминале для клиента Рег.Номер: {client.NumberAuto}: {message}");
+        }
+            
+    }
+}
 
 
 
 
 
+// Реализовываем класс верхнего уровня
 public class Parking
 {
     private readonly IPaymentService _paymentService;
     private readonly INotificationService _notificationService;
-    
+
+    public Parking(IPaymentService paymentService, INotificationService notificationService, int id, string adress, string city, bool isFill, int maxCountState, int currentCountState)
+    {
+        _paymentService = paymentService;
+        _notificationService = notificationService;
+        Id = id;
+        Adress = adress;
+        City = city;
+        IsFill = isFill;
+        this.maxCountState = maxCountState;
+        this.currentCountState = currentCountState;
+    }
+
     public int Id { get; set; }
     public string Adress { get; set; }
     public string City { get; set; }
@@ -95,32 +151,4 @@ public class Parking
         }
         
     }
-
-
-
-    public class PaymentService: IPaymentService
-    {
-        public void SellPayment(double amount, Client client)
-        {
-            Console.WriteLine($"Клиент -- {client.NumberAuto} платил {amount} руб.");
-        }
-    }
-    
-    public class NotificationService: INotificationService
-    {
-        public void SendNotification(string message, Client client)
-        {
-            if (client is RegisterClient registerClient)
-            {
-                Console.WriteLine($"SMS-Сообщение для клиента {registerClient.Login}: {message}");
-            }
-            else
-            {
-                Console.WriteLine($"Сообщение на терминале для клиента Рег.Номер: {client.NumberAuto}: {message}");
-            }
-            
-        }
-    }
-    
-    
 }
