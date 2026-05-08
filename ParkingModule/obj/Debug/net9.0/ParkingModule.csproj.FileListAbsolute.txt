@@ -1,0 +1,15 @@
+D:\C#_Project\ParkingModule\ParkingModule\bin\Debug\net9.0\ParkingModule.exe
+D:\C#_Project\ParkingModule\ParkingModule\bin\Debug\net9.0\ParkingModule.deps.json
+D:\C#_Project\ParkingModule\ParkingModule\bin\Debug\net9.0\ParkingModule.runtimeconfig.json
+D:\C#_Project\ParkingModule\ParkingModule\bin\Debug\net9.0\ParkingModule.dll
+D:\C#_Project\ParkingModule\ParkingModule\bin\Debug\net9.0\ParkingModule.pdb
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.GeneratedMSBuildEditorConfig.editorconfig
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.AssemblyInfoInputs.cache
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.AssemblyInfo.cs
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.csproj.CoreCompileInputs.cache
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.sourcelink.json
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.dll
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\refint\ParkingModule.dll
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.pdb
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ParkingModule.genruntimeconfig.cache
+D:\C#_Project\ParkingModule\ParkingModule\obj\Debug\net9.0\ref\ParkingModule.dll
